@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7/dist/ionicons/ionicons.esm.js"></script>
+<style>
+body { 
+    background: #0f1117; 
+}
+    
+.container.mt-4 { 
+    max-width: 100% !important; 
+    padding: 0 !important; 
+    margin-top: 0 !important; 
+}
+
+#sidebar{
+    width: 240px;
+    min-height: calc(100vh - 72px);
+    background: #16181f;
+    border-right: 1px solid #2a2d38;
+    transition: width 0.28s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar.collapsed{ 
+    width: 64px; 
+}
+
+.sidebar-brand{
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border-bottom: 1px solid #2a2d38;
+}
+
+.sidebar-low-stock {
+    border-top: 1px solid #2a2d38;
+    padding-top: 10px;
+    margin-top: auto;
+}
+
+.low-stock-header {
+    display: flex;
+    align-items: center;
+    color: #f5a623;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 6px 6px;
+}
+
+.low-stock-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 6px;
+    border-radius: 7px;
+    margin-bottom: 2px;
+    background: rgba(255,80,80,0.06);
+}
+
+.low-stock-name {
+    color: #c0c4d6;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.low-stock-badge {
+    background: #ff5050;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 5px;
+    padding: 2px 6px;
+    min-width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.low-stock-empty {
+    color: #555972;
+    font-size: 12px;
+    padding: 4px 6px;
+}
+
+#sidebar.collapsed .sidebar-low-stock {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.brand-icon{
+    width: 32px; height: 32px; min-width: 32px;
+    background: #f5a623;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 15px; color: #0f1117;
+}
+
+.brand-text {
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    transition: opacity .2s;
+}
+
+#sidebar.collapsed .brand-text,
+#sidebar.collapsed .nav-label{ 
+    opacity: 0; 
+}
+
+.nav-item-custom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    color: #8b8fa8;
+    text-decoration: none;
+    border-radius: 10px;
+    margin: 2px 8px;
+    transition: background .18s, color .18s;
+}
+
+.nav-item-custom:hover{ 
+    background: #1e2130; 
+    color: #f5a623; 
+}
+
+.nav-item-custom.active{ 
+    background: rgba(245,166,35,.12); 
+    color: #f5a623; 
+}
+        
+.nav-icon{
+    width: 36px; height: 36px; min-width: 36px;
+    background: #1e2130;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 17px;
+}
+        
+.nav-item-custom.active .nav-icon{ 
+    background: rgba(245,166,35,.18); 
+}
+        
+.sidebar-footer {
+    border-top: 1px solid #2a2d38;
+    padding: 8px 0;
+}
+        
+#sidebarToggle {
+    background: #f5a623;
+    border: none;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    color: #0f1117;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#main{ 
+    flex: 1; padding: 28px 32px; 
+    overflow-x: hidden; 
+}
+
+.stat-card{
+    background: #16181f;
+    border: 1px solid #2a2d38 !important;
+    border-radius: 14px !important;
+    position: relative;
+    overflow: hidden;
+}
+
+        
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+}
+        
+.stat-card.c1::before { 
+    background: linear-gradient(90deg, #f5a623, #f7c76b); 
+}
+        
+.stat-card.c2::before { 
+    background: linear-gradient(90deg, #4f8ef7, #7eb4ff); 
+}
+        
+.stat-card.c3::before { 
+    background: linear-gradient(90deg, #3ecf8e, #6ee7b7); 
+}
+        
+.stat-card.c4::before { 
+    background: linear-gradient(90deg, #e05252, #f48080); 
+}
+
+.sales-bar {
+    width: 40px;
+    background: #f5a623;
+    border-radius: 6px 6px 0 0;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.stat-label { 
+    font-size: 11px; 
+    color: #555972; 
+    text-transform: uppercase; 
+    letter-spacing: .6px; 
+}
+        
+.stat-value { 
+    font-size: 26px; 
+    font-weight: 700; 
+    color: #0f1117; 
+}
+
+        
+.table-wrap {
+    background: #16181f;
+    border: 1px solid #2a2d38;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.table { 
+    margin-bottom: 0; font-size: 13.5px; 
+}
+
+.table thead th {
+    background: #1a1d28;
+    color: #555972;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    border-bottom: 1px solid #2a2d38 !important;
+    padding: 13px 18px;
+}
+
+.table tbody tr {
+     border-color: #1e2130; 
+}
+
+.table tbody tr:last-child td {
+     border-bottom: none; 
+}
+
+.table td {
+    padding: 12px 18px; 
+    color: #c0c5da; 
+    vertical-align: middle; 
+    border-color: #1e2130; 
+}
+
+.table tbody tr:hover td {
+    background: #f9c76f;
+    color: #000;
+}
+
+.badge-pending  {
+    background: rgb(245, 166, 35);
+    color: #f5a623; 
+}
+
+.badge-complete { 
+    background: rgba(62,207,142,.15);  
+    color: #3ecf8e; 
+}
+    
+.badge-cancel{ 
+    background: rgba(224,82,82,.15);   
+    color: #e05252; 
+}
+
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+    background: #f5a623;
+    color: #0f1117;
+    padding: 16px 20px;
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+    display: none;
+    font-weight: 700;
+}
+
+.toast-notification.show {
+    display: block;
+    animation: toastFade 0.4s ease;
+}
+
+@keyframes toastFade {
+    from {opacity: 0; transform: translateY(-10px);} 
+    to {opacity: 1; transform: translateY(0);} 
+}
+
+.thumb{ 
+    width: 42px; 
+    height: 42px; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    border: 1px solid #2a2d38; 
+}
+
+.btn-add {
+    background: #f5a623; color: #0f1117;
+    font-weight: 700; font-size: 13px;
+    border: none; border-radius: 8px;
+    padding: 7px 16px;
+}
+
+.btn-add:hover{ 
+    background: #e09610; 
+    color: #0f1117; 
+}
+
+.section-title{ 
+    font-size: 15px; 
+    font-weight: 600; 
+    color: #0f1117; 
+}
+
+.page-title{ 
+    font-size: 22px; 
+    font-weight: 700; 
+    color: #0f1117; 
+}
+
+.page-sub{ 
+    font-size: 13px; 
+    color: #555972; 
+}
+
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+
+    <div class="d-flex">
+
+        <div id="sidebar">
+
+            <div class="sidebar-brand">
+                <button id="sidebarToggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">
+                    <ion-icon name="menu-outline" style="font-size:18px;"></ion-icon>
+                </button>
+                <div class="brand-icon ms-1">E</div>
+                <span class="brand-text ms-1">E_Mobix Admin</span>
+            </div>
+
+            <div class="py-2">
+                <a class="nav-item-custom active" href="{% url 'dashboard' %}">
+                    <span class="nav-icon"><ion-icon name="grid-outline"></ion-icon></span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a class="nav-item-custom" href="{% url 'add_product' %}">
+                    <span class="nav-icon"><ion-icon name="add-circle-outline"></ion-icon></span>
+                    <span class="nav-label">Add Product</span>
+                </a>
+                <a class="nav-item-custom" href="{% url 'dashboard_orders' %}">
+                    <span class="nav-icon"><ion-icon name="receipt-outline"></ion-icon></span>
+                    <span class="nav-label">Orders</span>
+                </a>
+                <a class="nav-item-custom" href="{% url 'dashboard_products' %}">
+                    <span class="nav-icon"><ion-icon name="phone-portrait-outline"></ion-icon></span>
+                    <span class="nav-label">Products</span>
+                </a>
+                <a class="nav-item-custom" href="{% url 'dashboard_customers' %}">
+                    <span class="nav-icon"><ion-icon name="people-outline"></ion-icon></span>
+                    <span class="nav-label">Customers</span>
+                </a>
+                <a class="nav-item-custom" href="{% url 'dashboard_low_stock' %}">
+                    <span class="nav-icon" style="background:rgba(255,80,80,0.12);">
+                        <ion-icon name="warning-outline" style="color:#ff5050;"></ion-icon>
+                    </span>
+                    <span class="nav-label">Low Stock</span>
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <a class="nav-item-custom" href="{% url 'logout' %}">
+                    <span class="nav-icon"><ion-icon name="log-out-outline"></ion-icon></span>
+                    <span class="nav-label">Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="main" class="flex-grow-1 p-4">
+
+            <p class="page-title mb-1">Admin Dashboard</p>
+            <p class="page-sub mb-4">Welcome back, {{ user.username }}</p>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="card stat-card c1 p-3">
+                        <div class="stat-label mb-2">Total Sales</div>
+                        <div class="stat-value">${{ total_sales }}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card stat-card c2 p-3">
+                        <div class="stat-label mb-2">Total Orders</div>
+                        <div class="stat-value">{{ total_orders }}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card stat-card c3 p-3">
+                        <div class="stat-label mb-2">Customers</div>
+                        <div class="stat-value">{{ total_customers }}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card stat-card c4 p-3">
+                        <div class="stat-label mb-2">Total Profit</div>
+                        <div class="stat-value">${{ total_profit|floatformat:0 }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card stat-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <p class="section-title mb-1">Sales Overview</p>
+                        <p style="color:#777;font-size:13px;margin:0;">Monthly sales performance</p>
+                    </div>
+                    <div>
+                        <div class="btn-group" role="group" aria-label="Period selector">
+                            <a href="?period=day" class="btn btn-sm {% if period == 'day' %}btn-primary{% else %}btn-outline-light{% endif %}">Day</a>
+                            <a href="?period=month" class="btn btn-sm {% if period == 'month' %}btn-primary{% else %}btn-outline-light{% endif %}">Month</a>
+                            <a href="?period=year" class="btn btn-sm {% if period == 'year' %}btn-primary{% else %}btn-outline-light{% endif %}">Year</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-3">
+                    {% if sales_series %}
+                    <div class="d-flex align-items-end" style="gap:12px;overflow-x:auto;padding-bottom:12px;">
+                        {% for s in sales_series %}
+                        {% widthratio s.value max_sales 100 as pct %}
+                        <div class="text-center" style="min-width:56px;">
+                            <div style="height:180px;display:flex;align-items:flex-end;">
+                                <div class="sales-bar" data-height="{{ pct|default_if_none:'0' }}"></div>
+                            </div>
+                            <div style="color:#9aa0b4;font-size:12px;margin-top:8px;">{{ s.label }}</div>
+                            <div style="color:#c0c5da;font-weight:700;font-size:13px;">${{ s.value|floatformat:0 }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center" style="color:#555972;padding:20px">No sales data available for this period.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="section-title">Products</span>
+            </div>
+
+            <div class="table-wrap mb-4">
+                <table class="table">
+                    <thead>
+                        <tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                        <tr>
+                            <td>{% if p.image %}<img src="{{ p.image.url }}" class="thumb">{% endif %}</td>
+                            <td>{{ p.name }}</td>
+                            <td>${{ p.price }}</td>
+                            <td>{{ p.stock }}</td>
+                            <td>{{ p.description|truncatechars:40 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="section-title mb-3">Recent Orders</p>
+            <div class="table-wrap mb-4">
+                <table class="table">
+                    <thead>
+                        <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for o in orders %}
+                        <tr>
+                            <td>#{{ o.id }}</td>
+                            <td>{{ o.full_name|default:o.user.username }}</td>
+                            <td>${{ o.total }}</td>
+                            <td>
+                                <span class="badge rounded-pill
+                                    {% if o.status == 'completed' %}badge-complete
+                                    {% elif o.status == 'cancelled' %}badge-cancel
+                                    {% else %}badge-pending{% endif %}">
+                                    {{ o.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ o.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="section-title mb-3">Top Selling Products (All Time)</p>
+            <div class="table-wrap mb-4">
+                <table class="table">
+                    <thead>
+                        <tr><th>#</th><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Sold</th></tr>
+                    </thead>
+                    <tbody>
+                        {% if top_products %}
+                            {% for item in top_products %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" class="thumb">
+                                    {% else %}
+                                        <div class="thumb" style="display:inline-block;background:#fff"></div>
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.product.name }}</td>
+                                <td>${{ item.product.price|floatformat:2 }}</td>
+                                <td>{{ item.product.stock }}</td>
+                                <td>{{ item.sold }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr><td colspan="6" class="text-center" style="color:#555972;padding:20px">No sales data.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="section-title mb-3">Low Stock</p>
+            <div class="table-wrap mb-4">
+                <table class="table">
+                    <thead>
+                        <tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for p in low_stock %}
+                        <tr>
+                            <td>{% if p.image %}<img src="{{ p.image.url }}" class="thumb">{% endif %}</td>
+                            <td>{{ p.name }}</td>
+                            <td>${{ p.price }}</td>
+                            <td class="text-danger fw-bold">{{ p.stock }} left</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center" style="color:#555972;padding:20px">All products well stocked.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.sales-bar').forEach(function(el) {
+            var height = el.dataset.height || '0';
+            el.style.height = height + '%';
+        });
+    </script>
+
+    {% if new_orders_count %}
+    <div id="admin-new-order-toast" class="toast-notification">
+                You have {{ new_orders_count }} new order{{ new_orders_count|pluralize }}.
+                {% if new_orders_ids %}
+                    <a href="{% url 'dashboard_order_detail' new_orders_ids.0 %}" class="btn btn-sm btn-warning ms-2">View Latest</a>
+                {% else %}
+                    <a href="{% url 'dashboard_orders' %}" class="btn btn-sm btn-warning ms-2">View Orders</a>
+                {% endif %}
+    </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var toast = document.getElementById('admin-new-order-toast');
+            if (toast) {
+                toast.classList.add('show');
+                setTimeout(function() {
+                    toast.classList.remove('show');
+                }, 7000);
+            }
+        });
+    </script>
+    {% endif %}
+
+    {% endblock %}
+</body>
+</html>

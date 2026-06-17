@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid px-0 mb-1">
+    <section class="hero-section" id="hero" style="min-height: 78vh; overflow: hidden; position: relative;">
+        <div id="hero-bg" style="
+            position: absolute;
+            top: -20%;
+            left: 0;
+            width: 100%;
+            height: 140%;
+            background-image: url('https://www.apple.com/v/iphone-17-pro/a/images/overview/welcome/hero_endframe__xdzisdq1ppem_xlarge.jpg');
+            background-size: cover;
+            background-position: top center;
+            will-change: transform;
+        "></div>
+    </section>
+</div>
+
+<div class="container text-center mt-3 mb-5">
+    <a href="#products" class="btn btn-warning btn-lg rounded-pill shadow-lg">Shop Products</a>
+</div>
+
+<section class="products-section">
+    <div class="container">
+        <div class="row mb-4 section-intro">
+            <div class="col-12 text-center">
+                <p class="text-uppercase">Featured collection</p>
+                <h2 class="fw-bold">Shop our best iPhone models</h2>
+            </div>
+        </div>
+
+        <div class="row gx-4 gy-4" id="products">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+                    <img src="{{ product.image.url }}" class="card-img-top" style="height:250px; object-fit:contain; background-color: #f8f9fa; padding: 15px;">
+                </a>
+                
+                <div class="card-body d-flex flex-column">
+                    <h5><a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">{{ product.name }}</a></h5>
+                    <p class="price">${{ product.price }}</p>
+                    <p class="text-muted">{{ product.description|truncatechars:80 }}</p>
+
+                    <form action="{% url 'add_to_cart' product.id %}" method="POST" class="mt-auto">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary w-100">
+                            Add to Cart <ion-icon name="cart-outline" style="vertical-align: middle;"></ion-icon>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+</section>
+
+<footer class="bg-dark text-light py-5">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h5 class="text-white mb-3">Shop</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'home' %}" class="text-light text-decoration-none">Products</a></li>
+                    <li><a href="/cart/" class="text-light text-decoration-none">Cart</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-light text-decoration-none">About</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5 class="text-white mb-3">Support & Contact</h5>
+                <p class="mb-2 text-light"><strong>Phone:</strong> +855 103 567 619</p>
+                <p class="mb-3 text-light"><strong>Email:</strong> emobix@gmail.com</p>
+                <div style="border-radius: 10px; overflow: hidden; height: 200px;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1705.8400552263156!2d104.88939449573138!3d11.570873284868885!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109519e617fd2ad%3A0xf2d7ba03bf4d9285!2sWestern%20University%20Main%20Campus!5e1!3m2!1sen!2sus!4v1780494179066!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    const heroBg = document.getElementById('hero-bg');
+    window.addEventListener('scroll', function () {
+        const scrollY = window.scrollY;
+        heroBg.style.transform = 'translateY(' + scrollY * 0.4 + 'px)';
+    });
+</script>
+
+{% endblock %}

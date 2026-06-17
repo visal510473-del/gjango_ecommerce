@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center py-5">
+    <div class="mb-4" style="font-size: 64px;"><ion-icon name="checkmark-circle-outline"></ion-icon></div>
+    <h2 class="fw-bold">Order Placed Successfully!</h2>
+    <p class="text-muted">Order #{{ order.id }}</p>
+    <p class="fs-5">Total paid: <strong class="text-success">${{ order.total }}</strong></p>
+    <a href="/" class="btn btn-warning mt-3 px-4 fw-bold">Continue Shopping</a>
+</div>
+<div class="container py-4">
+    <h4 class="mb-3">Order Items</h4>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr><th>Product</th><th>Variant</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody>
+                {% for it in order.items.all %}
+                <tr>
+                    <td>{{ it.product.name }}</td>
+                    <td>{% if it.variant %}{{ it.variant }}{% else %}-{% endif %}</td>
+                    <td>${{ it.price|floatformat:2 }}</td>
+                    <td>{{ it.qty }}</td>
+                    <td>${{ it.subtotal|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

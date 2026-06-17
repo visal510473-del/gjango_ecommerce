@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body { 
+  background: #0f1117; 
+}
+
+.container.mt-4 { 
+  max-width: 100% !important; 
+  padding: 0 !important; 
+  margin-top: 0 !important; 
+}
+
+#sidebar { 
+  width: 240px; 
+  min-height: calc(100vh - 72px); 
+  background: #16181f; 
+  border-right: 1px solid #2a2d38; 
+  transition: width 0.28s ease; 
+  overflow: hidden; 
+  white-space: nowrap; 
+}
+
+#sidebar.collapsed { 
+  width: 64px; 
+}
+
+.sidebar-brand { 
+  height: 64px; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  padding: 0 16px;
+  border-bottom: 1px solid #2a2d38; 
+}
+
+.brand-icon { 
+  width: 32px; 
+  height: 32px; 
+  min-width: 32px; 
+  background: #f5a623; 
+  border-radius: 8px; 
+  display: grid; 
+  place-items: center; 
+  font-weight: 800; 
+  font-size: 15px; 
+  color: #0f1117; 
+}
+
+.brand-text { 
+  color: #fff; 
+  font-weight: 700; 
+  font-size: 15px; 
+  transition: opacity .2s; 
+}
+
+#sidebar.collapsed .brand-text, #sidebar.collapsed .nav-label { 
+  opacity: 0; 
+}
+
+.nav-item-custom { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 10px 14px; 
+  color: #8b8fa8; 
+  text-decoration: none; 
+  border-radius: 10px; 
+  margin: 2px 8px; 
+  transition: background .18s, color .18s; 
+}
+
+.nav-item-custom:hover { 
+  background: #1e2130; 
+  color: #f5a623; 
+}
+
+.nav-item-custom.active { 
+  background: rgba(245,166,35,.12); 
+  color: #f5a623; 
+}
+.nav-icon { 
+  width: 36px; 
+  height: 36px; 
+  min-width: 36px; 
+  background: #1e2130; 
+  border-radius: 8px; 
+  display: grid; 
+  place-items: center; 
+  font-size: 17px; 
+}
+
+.nav-item-custom.active .nav-icon { 
+  background: rgba(245,166,35,.18); 
+}
+
+.sidebar-footer { 
+  border-top: 1px solid #2a2d38; 
+  padding: 8px 0; 
+}
+
+#sidebarToggle { 
+  background: #f5a623; 
+  border: none; 
+  width: 32px; 
+  height: 32px; 
+  border-radius: 8px; 
+  display: grid;
+  place-items: center; 
+  color: #0f1117; 
+  cursor: pointer; 
+  flex-shrink: 0; 
+}
+
+#main { 
+  flex: 1; 
+  padding: 28px 32px; 
+  overflow-x: hidden; 
+}
+
+.table-wrap { 
+  background: #16181f; 
+  border: 1px solid #2a2d38; 
+  border-radius: 14px; 
+  overflow: hidden; 
+}
+
+.table { 
+  margin-bottom: 0; 
+  font-size: 13.5px; 
+}
+
+.table thead th { 
+  background: #1a1d28; 
+  color: #555972; 
+  font-size: 11px; 
+  text-transform: uppercase; 
+  letter-spacing: .8px; 
+  border-bottom: 1px solid #2a2d38 !important; 
+  padding: 13px 18px; 
+}
+
+.table tbody tr { 
+  border-color: #1e2130; 
+}
+
+.table tbody tr:last-child td { 
+  border-bottom: none; 
+}
+
+.table td { 
+  padding: 12px 18px; 
+  color: #c0c5da; 
+  vertical-align: middle; 
+  border-color: #1e2130; 
+}
+
+.table tbody tr:hover td { 
+  background: #f9c76f;
+  color: #000;
+}
+
+.thumb { 
+  width: 42px; 
+  height: 42px; 
+  object-fit: cover; 
+  border-radius: 8px; 
+  border: 1px solid #2a2d38; 
+}
+
+</style>
+
+<div class="d-flex">
+  <div id="sidebar">
+    <div class="sidebar-brand">
+      <button id="sidebarToggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">
+        <ion-icon name="menu-outline" style="font-size:18px;"></ion-icon>
+      </button>
+      <div class="brand-icon ms-1">E</div>
+      <span class="brand-text ms-1">E_Mobix Admin</span>
+    </div>
+    <div class="py-2">
+      <a class="nav-item-custom" href="{% url 'dashboard' %}">
+        <span class="nav-icon"><ion-icon name="grid-outline"></ion-icon></span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item-custom" href="{% url 'add_product' %}">
+        <span class="nav-icon"><ion-icon name="add-circle-outline"></ion-icon></span>
+        <span class="nav-label">Add Product</span>
+      </a>
+      <a class="nav-item-custom" href="{% url 'dashboard_orders' %}">
+        <span class="nav-icon"><ion-icon name="receipt-outline"></ion-icon></span>
+        <span class="nav-label">Orders</span>
+      </a>
+      <a class="nav-item-custom active" href="{% url 'dashboard_products' %}">
+        <span class="nav-icon"><ion-icon name="phone-portrait-outline"></ion-icon></span>
+        <span class="nav-label">Products</span>
+      </a>
+      <a class="nav-item-custom" href="{% url 'dashboard_customers' %}">
+        <span class="nav-icon"><ion-icon name="people-outline"></ion-icon></span>
+        <span class="nav-label">Customers</span>
+      </a>
+      <a class="nav-item-custom" href="{% url 'dashboard_low_stock' %}">
+       <span class="nav-icon"><ion-icon name="warning-outline"></ion-icon></span>
+        <span class="nav-label">Low Stock</span>
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <a class="nav-item-custom" href="{% url 'logout' %}">
+        <span class="nav-icon"><ion-icon name="log-out-outline"></ion-icon></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <div id="main" class="flex-grow-1 p-4">
+    <div class="p-4">
+      <h3 class="mb-3">Products</h3>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr><th>#</th><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Variants</th><th>Edit</th><th>Delete</th></tr>
+          </thead>
+          <tbody>
+            {% for p in products %}
+          <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{% if p.image %}
+                  <img src="{{ p.image.url }}" class="thumb" alt="{{ p.name }}">
+              {% endif %}</td>
+              <td>{{ p.name }}</td>
+              <td>${{ p.price }}</td>
+              <td>
+                  <div style="display:flex;align-items:center;gap:8px">
+                      <span>{{ p.stock }}</span>
+                      <form action="{% url 'update_stock' p.id %}" method="POST" style="display:inline-flex;align-items:center;gap:6px;margin:0;">
+                          {% csrf_token %}
+                          <input type="number" name="add_stock" value="1" min="1" style="width:64px;padding:6px;border-radius:6px;border:1px solid #2a2d38;background:#121217;color:#fff;font-size:13px">
+                          <button class="btn btn-sm btn-success" style="padding:.3rem .6rem">Add</button>
+                      </form>
+                  </div>
+              </td>
+              <td>
+                  <a href="{% url 'manage_variants' p.id %}" class="btn btn-sm" style="background:#1e2130;color:#f5a623;border:1px solid #2a2d38;">
+                      Manage Variants
+                  </a>
+              </td>
+              <td>
+                    <a href="{% url 'edit_product' p.id %}" class="btn btn-sm" style="background:#1e2130;color:#4ecca3;border:1px solid #4ecca3;">
+                      Edit
+                  </a>
+              </td>
+              <td>
+                  <form action="{% url 'delete_product' p.id %}" method="POST" onsubmit="return confirm('Delete {{ p.name }}?')">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                  </form>
+              </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="text-center">No products</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

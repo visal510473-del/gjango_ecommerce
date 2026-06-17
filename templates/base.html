@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E_Mobix</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7/dist/ionicons/ionicons.esm.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            z-index: 1000;
+            top: 0;
+            
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .price {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .hero-section {
+            min-height: 92vh;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 0 5rem;
+            max-width: 900px;
+        }
+
+        .hero-panel {
+            background: transparent;
+            border: none;
+            backdrop-filter: none;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .hero-panel .hero-badge {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 0.92;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.88);
+            max-width: 520px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons .btn-warning {
+            background: linear-gradient(135deg, #ffd500, #ffbf00);
+            border-color: transparent;
+            color: #111;
+        }
+
+        .hero-buttons .btn-outline-light {
+            border-color: rgba(255,255,255,0.85);
+            color: #fff;
+        }
+
+        .hero-buttons .btn-outline-light:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .hero-buttons a {
+            min-width: 170px;
+        }
+
+        .hero-buttons .btn {
+            box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+        }
+
+        .hero-title {
+            max-width: 13ch;
+        }
+
+        .hero-subtitle {
+            max-width: 560px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.65rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(255, 197, 0, 0.98);
+            color: #111;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: 0.92;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            max-width: 660px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .hero-buttons .btn {
+            min-width: 190px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 999px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+
+        .hero-buttons .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-buttons .btn-warning {
+            background: #ffd500;
+            border-color: transparent;
+            color: #111;
+            box-shadow: 0 18px 40px rgba(255, 213, 0, 0.25);
+        }
+
+        .hero-buttons .btn-outline-light {
+            border-color: rgba(255,255,255,0.8);
+            color: #fff;
+        }
+
+        .hero-buttons .btn-outline-light:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .products-section {
+            padding: 4.5rem 0 2rem;
+            background: #f8f9fb;
+        }
+
+        .products-section .section-intro {
+            margin-bottom: 2rem;
+        }
+
+        .products-section .section-intro p {
+            letter-spacing: 0.14em;
+            color: #6c757d;
+            font-size: 0.92rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .products-section .section-intro h2 {
+            font-size: clamp(2rem, 3vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #fff;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 24px 60px rgba(18, 38, 63, 0.12);
+        }
+
+        .card-img-top {
+            border-bottom-left-radius: 1.5rem;
+            border-bottom-right-radius: 1.5rem;
+        }
+
+        .price {
+            color: #28a745;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-body h5 {
+            font-size: 1.25rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .card-body p {
+            margin-bottom: 1.25rem;
+        }
+
+        .btn-primary {
+            background: #0d6efd;
+            border-color: #0d6efd;
+            box-shadow: 0 10px 25px rgba(13, 110, 253, 0.15);
+        }
+
+        .btn-primary:hover {
+            background: #0b5ed7;
+            border-color: #0a58ca;
+        }
+
+        /* Hero slider styles */
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            min-height: 78vh; /* ensure slider fills the hero area */
+            height: 100%;
+        }
+
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out; /* faster fade */
+            will-change: opacity, transform;
+            transform: scale(1);
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            z-index: 1;
+            transform: scale(1.015); /* subtle zoom when active */
+            transition: opacity 0.8s ease-in-out, transform 4s linear;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-section { /* ensure slider fills hero */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Hero slider styles */
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            will-change: opacity;
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+            z-index: 0;
+        }
+        
+        .hero-section { /* ensure slider fills hero */
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-0">
+    <div class="container">
+        
+        <a class="navbar-brand fw-bold fs-4 text-uppercase tracking-wider" href="/">
+            <span class="text-white">E_</span><span class="text-warning">Mobix</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                
+                <a href="/" class="btn btn-outline-light px-3 rounded-pill">Home</a>
+
+                {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-info px-3 rounded-pill">
+                        <ion-icon name="grid-outline"></ion-icon> Dashboard
+                    </a>
+                {% endif %}
+
+                <a href="/cart/" class="btn btn-warning px-3 rounded-pill position-relative fw-bold">
+                    <ion-icon name="cart-outline"></ion-icon> Cart
+                </a>
+
+                <div class="vr text-white-50 d-none d-lg-block mx-1" style="height: 24px;"></div>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center gap-2 bg-secondary bg-opacity-25 px-3 py-1.5 rounded-pill border border-secondary border-opacity-50">
+                        <span class="text-white-50 small">Welcome,</span>
+                        <span class="fw-bold text-info">{{ user.username }}</span>
+                    </div>
+                    <a href="{% url 'logout' %}" class="btn btn-danger px-3 rounded-pill shadow-sm btn-sm fw-bold">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-info px-3 rounded-pill btn-sm">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-success px-3 rounded-pill btn-sm fw-bold shadow-sm">Register</a>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container-fluid px-0">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

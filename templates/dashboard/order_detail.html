@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Order #{{ order.id }}</h3>
+    <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Customer</h5>
+      <p class="mb-1">{{ order.full_name|default:order.user.username }}</p>
+      <p class="mb-1">{{ order.phone }}</p>
+      <p class="mb-1">{{ order.address }}</p>
+      <p class="text-muted">Ordered: {{ order.created_at }}</p>
+    </div>
+    <div class="col-md-6">
+      <h5>Payment</h5>
+      <p class="mb-1">Amount: <strong>${{ order.total }}</strong></p>
+      {% if order.payment_proof %}
+      <p class="mb-1">Payment proof: <a href="{{ order.payment_proof.url }}" target="_blank">View</a></p>
+      {% endif %}
+      <p class="mb-1">Notified: {{ order.notified }}</p>
+    </div>
+  </div>
+
+  <hr />
+
+  <h5>Items</h5>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr><th>Product</th><th>Variant</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
+      </thead>
+      <tbody>
+        {% for it in items %}
+        <tr>
+          <td>{{ it.product.name }}</td>
+          <td>{% if it.variant %}{{ it.variant }}{% else %}-{% endif %}</td>
+          <td>${{ it.price|floatformat:2 }}</td>
+          <td>{{ it.qty }}</td>
+          <td>${{ it.subtotal|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+    <h4>Total: <strong class="text-success">${{ order.total }}</strong></h4>
+  </div>
+
+  <div class="mt-4">
+    <a href="{% url 'dashboard_orders' %}" class="btn btn-outline-secondary">Back to Orders</a>
+  </div>
+</div>
+{% endblock %}
